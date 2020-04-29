@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class TodoHardCodedService {
 
     private static List<Todo> todos = new ArrayList<>();
-    private static Long counter = 0l;
+    private static long counter = 0;
 
     static {
         todos.add(new Todo(++counter, "user", "learn to dance", new Date(), false));
@@ -25,7 +25,7 @@ public class TodoHardCodedService {
     }
 
     public Todo save(Todo todo) {
-        if(todo.getId() == -1){
+        if(todo.getId()==-1 || todo.getId()==0){
             todo.setId(++counter);
             todos.add(todo);
         } else {
@@ -35,7 +35,7 @@ public class TodoHardCodedService {
         return todo;
     }
 
-    public Todo deleteById(Long id) {
+    public Todo deleteById(long id) {
         Todo todo = findById(id);
         if(todo == null)
             return null;
@@ -44,7 +44,7 @@ public class TodoHardCodedService {
         }
         return null;
     }
-    public Todo findById(Long id) {
+    public Todo findById(long id) {
         for(Todo todo: todos) {
             if(todo.getId() == id) {
                 return todo;

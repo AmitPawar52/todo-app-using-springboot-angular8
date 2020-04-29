@@ -3,17 +3,17 @@ package com.example.rest.todowebservice.entity;
 import java.util.Date;
 
 public class Todo {
-    private Long id;
+    private long id;
     private String username;
     private String description;
     private Date targetDate;
     private boolean isDone;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,7 +49,7 @@ public class Todo {
         this.isDone = isDone;
     }
 
-    public Todo(Long id, String username, String description, Date targetDate, boolean isDone) {
+    public Todo(long id, String username, String description, Date targetDate, boolean isDone) {
         this.id = id;
         this.username = username;
         this.description = description;
@@ -65,7 +65,7 @@ public class Todo {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
 
@@ -78,12 +78,8 @@ public class Todo {
         if (getClass() != obj.getClass())
             return false;
         Todo other = (Todo) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
+        if (id != other.id)
             return false;
         return true;
-    }
-    
+    }    
 }
