@@ -12,9 +12,10 @@ import { TodoComponent } from './todo/todo.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginRouteGuardService] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'welcome/:name', component: WelcomeComponent, canActivate: [RouteGuardService] },
+  { path: 'welcome', component: WelcomeComponent },
   { path: 'todos', component: ListTodosComponent, canActivate: [RouteGuardService] },
   { path: 'todos/:id', component: TodoComponent, canActivate: [RouteGuardService] },
+  { path: 'oauth2/redirect', redirectTo: 'welcome', pathMatch: 'full' },
   { path: 'logout', component: LogoutComponent, canActivate: [RouteGuardService] },
   { path: '**', component: ErrorComponent }
 ];

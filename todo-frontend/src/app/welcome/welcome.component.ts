@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { WelcomeDataService } from '../service/data/welcome-data.service';
+import { BasicAuthenticationService } from '../service/basic-authentication.service';
 
 @Component({
   selector: 'app-welcome',
@@ -14,18 +14,18 @@ export class WelcomeComponent implements OnInit {
   msgFromService: string;
   errorMsgFromService: string;
 
-  constructor(private route:ActivatedRoute,
+  constructor(private authService: BasicAuthenticationService,
               private service: WelcomeDataService ) { }
 
   ngOnInit() {
-    this.name =this.route.snapshot.params['name']
+    this.name = this.authService.getAuthenticatedUser();
   }
-  getWelcomeMessage() {
-    this.service.executeHelloWorldBeanService().subscribe(
-      response => this.handleSuccessResponse(response),
-      error => this.handleErrorResponse(error)
-    );
-  }
+  // getWelcomeMessage() {
+  //   this.service.executeHelloWorldBeanService().subscribe(
+  //     response => this.handleSuccessResponse(response),
+  //     error => this.handleErrorResponse(error)
+  //   );
+  // }
 
   getWelcomeMessageWithParam() {
     this.service.executeHelloWorldWithPathParam(this.name).subscribe(

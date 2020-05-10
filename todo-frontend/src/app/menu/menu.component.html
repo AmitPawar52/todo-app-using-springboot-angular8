@@ -1,14 +1,14 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div><a routerLink="/welcome/user" class="navbar-brand"> Todo APP </a></div>
+        <div><a routerLink="/welcome" class="navbar-brand"> Todo APP </a></div>
         <ul class="navbar-nav">
-            <li><a *ngIf="hardcodedAuthenticationService.isUserLoggedIn()" routerLink="/welcome/user" class="nav-link">Home</a></li>
-            <li><a *ngIf="hardcodedAuthenticationService.isUserLoggedIn()" routerLink="/todos" class="nav-link">Todos</a></li>
+            <li><a *ngIf="basicAuthenticationService.isUserLoggedIn()" [routerLink]="['welcome']" class="nav-link">Home</a></li>
+            <li><a *ngIf="basicAuthenticationService.isUserLoggedIn()" [routerLink]="['todos']" class="nav-link">Todos</a></li>
         </ul>
 
         <ul class="navbar-nav navbar-collapse justify-content-end">
-            <li><a *ngIf="!hardcodedAuthenticationService.isUserLoggedIn()" routerLink="/login" class="nav-link">login</a></li>
-            <li><a *ngIf="hardcodedAuthenticationService.isUserLoggedIn()" routerLink="/logout" class="nav-link">logout</a></li>
+            <li><a *ngIf="!basicAuthenticationService.isUserLoggedIn()" routerLink="/login" class="nav-link">login</a></li>
+            <li><a *ngIf="basicAuthenticationService.isUserLoggedIn()" routerLink="/logout" class="nav-link">logout</a></li>
         </ul>
     </nav>
 </header>

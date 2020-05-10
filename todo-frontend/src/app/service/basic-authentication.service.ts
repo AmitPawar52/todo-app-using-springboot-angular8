@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { API_URL } from '../app.constants';
 
 export const TOKEN = 'token'
-export const AUTHENTICATED_USER = 'authenticatedUser' 
+export const AUTHENTICATED_USER = 'authenticatedUser'
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,24 @@ export const AUTHENTICATED_USER = 'authenticatedUser'
 export class BasicAuthenticationService {
 
   constructor(private http: HttpClient) { }
-  
+
+  executeJWTAuthService(username, password) {
+
+    return this.http.post<any>(`${API_URL}/authenticate`, { username, password }).pipe(
+      map(
+        data => {
+          sessionStorage.setItem(AUTHENTICATED_USER, username)
+          sessionStorage.setItem(TOKEN, `Bearer ${data.token}`)
+          return data;
+        }
+      )
+    )
+  }
+
+
   executeBasicAuthService(username, password) {
-    
-    let basicAuthHeaderString = 'Basic '+ window.btoa(username + ':' + password);
+
+    let basicAuthHeaderString = 'Basic ' + window.btoa(username + ':' + password);
 
     let header = new HttpHeaders({
       Authorization: basicAuthHeaderString
@@ -35,8 +49,8 @@ export class BasicAuthenticationService {
   getAuthenticatedUser() {
     return sessionStorage.getItem(AUTHENTICATED_USER)
   }
-  getAuthToken(){
-    if(this.getAuthenticatedUser())
+  getAuthToken() {
+    if (this.getAuthenticatedUser())
       return sessionStorage.getItem(TOKEN)
   }
 
@@ -45,8 +59,11 @@ export class BasicAuthenticationService {
     return !(user === null)
   }
   logout() {
-    sessionStorage.removeItem(AUTHENTICATED_USER)
-    sessionStorage.removeItem(TOKEN)
+    let n = sessionStorage.length;
+    while (n--) {
+      let key = sessionStorage.key(n);
+      sessionStorage.removeItem(key);
+    }
   }
   // createBasicAuthHttpHeader() {
   //   let username = 'user'
@@ -59,5 +76,5 @@ export class BasicAuthenticationService {
 }
 
 export class AuthenticationBean {
-  constructor(public message: string){}
+  constructor(public message: string) { }
 }

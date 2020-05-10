@@ -4,8 +4,10 @@ import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.rest.todowebservice.entity.User;
 import com.example.rest.todowebservice.jwt.JwtTokenUtil;
 import com.example.rest.todowebservice.jwt.JwtUserDetails;
+import com.example.rest.todowebservice.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,15 +42,21 @@ public class JwtAuthenticationRestController {
 	@Autowired
 	private UserDetailsService jwtInMemoryUserDetailsService;
 
+	@Autowired
+	private UserService userService;
+
 	@RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest)
 			throws AuthenticationException {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-		final UserDetails userDetails = jwtInMemoryUserDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
-
+		// final UserDetails userDetails = jwtInMemoryUserDetailsService
+		// 		.loadUserByUsername(authenticationRequest.getUsername());
+		
+		final UserDetails userDetails = 
+					userService.loadUserByUsername(authenticationRequest.getUsername());
+		
 		final String token = jwtTokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtTokenResponse(token));
@@ -59,7 +67,8 @@ public class JwtAuthenticationRestController {
 		String authToken = request.getHeader(tokenHeader);
 		final String token = authToken.substring(7);
 		String username = jwtTokenUtil.getUsernameFromToken(token);
-		JwtUserDetails user = (JwtUserDetails) jwtInMemoryUserDetailsService.loadUserByUsername(username);
+		//JwtUserDetails user = (JwtUserDetails) jwtInMemoryUserDetailsService.loadUserByUsername(username);
+		User user = (User) userService.loadUserByUsername(username);
 
 		if (jwtTokenUtil.canTokenBeRefreshed(token)) {
 			String refreshedToken = jwtTokenUtil.refreshToken(token);
